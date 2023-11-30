@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+    <h1 style="text-align: center;"><u>Minesweeper</u></h1>
+
+    <div id="matrix" style="text-align: center;"></div>
+
+
+
+
+<script>
+
+var board=[
+
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],                                 
+
+]
+
+//Intitalising the game board
+
+board_colour="#fcefa9";
+
+row_count=board.length;
+item_count=board[0].length;
+
+square_number=1
+
+for(let i=0; i<row_count; i++) {
+
+    for(let j=0; j<item_count; j++){
+
+        var newButton=document.createElement('button');
+        newButton.textContent="I";
+        newButton.style.color=board_colour;
+
+        //Formatiing the button styles
+        newButton.style.borderWidth="1px";
+        newButton.style.height="40px";
+        newButton.style.width="40px";
+        newButton.style.backgroundColor=board_colour;
+        newButton.style.backgroundImage="url('Transparent.png')";
+        newButton.style.backgroundSize="37px 37px";
+
+        newButton.id="button_"+square_number.toString();
+       // document.getElementById(newButton.id).addEventListener("dblclick", console.log(1));
+        
+
+
+        matrix.appendChild(newButton);
+        square_number+=1;
+    }
+    matrix.appendChild(document.createElement("br"));
+}
+
+
+var btns=document.querySelectorAll("button");
+
+for(i of btns) {
+
+    i.addEventListener("dblclick", function() {
+        
+        var buttonID=this.id;
+        var str1=buttonID.split("_");
+
+        if(str1!=buttonID) {
+
+            var numberOfButton=parseInt(str1[1]);
+            buttonControl(numberOfButton);
+        }
+    });
+}
+
+
+
+function buttonControl(button) {
+
+    row_index=(Math.ceil((button/18)))-1//Retrieving the index of the row
+    item_index_in_row=button-(18*row_index)-1//Retrieving the index of the button in the row
+
+    button_ref=document.getElementById("button_"+button.toString()).style;
+
+    if(button_ref.backgroundImage=='url("Transparent.png")' && board[row_index][item_index_in_row]==0) {button_ref.backgroundImage='url("Flag.png")';}
+    else if(button_ref.backgroundImage=='url("Flag.png")' && board[row_index][item_index_in_row]==0) {button_ref.backgroundImage='url("Transparent.png")';}
+
+}
+
+
+</script>
+
+</body>
+</html>
