@@ -13,6 +13,8 @@
 
 var board=[
 
+    [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0],
+    [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -27,10 +29,8 @@ var board=[
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],                                 
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4],
+    [0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0],                                 
 
 ]
 
@@ -75,22 +75,23 @@ var btns=document.querySelectorAll("button");
 
 for(i of btns) {
 
+    //Adding an event listener to all of the buttons
     i.addEventListener("dblclick", function() {
         
         var buttonID=this.id;
         var str1=buttonID.split("_");
 
         if(str1!=buttonID) {
-
             var numberOfButton=parseInt(str1[1]);
-            buttonControl(numberOfButton);
+            flagControl(numberOfButton);
         }
     });
+
 }
 
 
 
-function buttonControl(button) {
+function flagControl(button) {
 
     row_index=(Math.ceil((button/18)))-1//Retrieving the index of the row
     item_index_in_row=button-(18*row_index)-1//Retrieving the index of the button in the row
@@ -99,7 +100,53 @@ function buttonControl(button) {
 
     if(button_ref.backgroundImage=='url("Transparent.png")' && board[row_index][item_index_in_row]==0) {button_ref.backgroundImage='url("Flag.png")';}
     else if(button_ref.backgroundImage=='url("Flag.png")' && board[row_index][item_index_in_row]==0) {button_ref.backgroundImage='url("Transparent.png")';}
+    generateBoard();
 
+}
+
+
+/*
+0,0,M,0,0,0,M,0,0,0,0,0,0,M,0,0,M,0,
+0,0,0,0,M,0,M,0,M,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,M,M,0,0,0,0,0,0,0,0,0,0,0,
+M,M,0,0,M,0,0,0,M,0,M,0,0,M,0,M,0,0,
+M,0,M,0,0,M,0,0,0,0,0,0,0,M,0,0,M,0,
+M,0,0,0,0,0,0,0,0,0,0,0,0,M,0,0,0,0,
+0,0,M,0,0,M,0,0,M,0,0,0,0,0,0,M,0,0,
+0,0,0,M,M,0,M,0,0,M,M,0,0,0,0,M,0,0,
+0,0,0,M,0,0,0,0,0,0,0,0,0,M,0,0,M,0,
+0,0,0,0,0,M,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,M,0,0,0,M,0,0,M,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,M,0,0,0,0,0,
+M,M,0,M,M,0,M,0,0,0,M,0,M,0,0,0,0,0,
+0,M,0,0,0,0,0,M,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,M,0,
+M,0,0,0,0,M,0,M,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,M,0,0,0,M,0,0,0,0,M,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+*/
+
+
+function generateBoard() {
+
+    //Generating the mines
+    var number_of_squares=row_count*item_count;//Calculating total squares on the board
+    var mine_number=Math.floor(number_of_squares/5);//Determining the number of mines to be placed on the board
+
+    for(let i=0; i<mine_number; i++) {
+
+        var random_row=Math.floor(Math.random()*(row_count-1));
+        var random_item_index_in_row=Math.floor(Math.random()*(item_count-1));
+
+        //Ensuring that the mine isn't places in the same place twice
+        while(board[random_row][random_item_index_in_row]==0) {
+            board[random_row][random_item_index_in_row]="M";
+        }
+    }
+
+    corner_adjacent_lst=[[board[0][1], board[1][0], board[1][1]], [board[0][-2], board[1][-1], board[1][-2]], [board[-2][0], board[-2][1], board[-1][1]], [board[-1][-2], board[-2][-1], board[-2][-2]],]
+    console.log(corner_adjacent_lst);
 }
 
 
