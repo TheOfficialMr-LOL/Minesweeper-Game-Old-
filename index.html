@@ -2,9 +2,44 @@
 <html>
 <body>
 
-    <h1 style="text-align: center;"><u>Minesweeper</u></h1>
+<style>
 
-    <div id="matrix" style="text-align: center;"></div>
+
+
+.prevent-select {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+#startButton{
+
+border-radius: 15px;
+background-color: #04AA6d;
+box-shadow: 0 7px #06764b;
+color: #fff;
+font-size: 30px;
+display: block;
+}
+#startButton:hover{background-color: #3e8e41}
+#startButton:active{
+
+background-color: #3e8e41;
+box-shadow: 0 5px #066c45;
+transform:translateY(4px);
+
+}
+
+</style>
+
+
+
+
+<h1 style="text-align: center;"><u>Minesweeper</u></h1>
+<div id="matrix" style="text-align: center;"></div>
+<br>
+<button id="startButton" style="width: 200px; height: 50px; top: 800px; margin: 10px auto;" class="prevent-select" onclick="generateBoard(); document.getElementById('startButton').style.display='none';">Start</button>
 
 
 
@@ -13,8 +48,6 @@
 
 var board=[
 
-    [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0],
-    [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -29,8 +62,10 @@ var board=[
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4],
-    [0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0],                                 
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],                                 
 
 ]
 
@@ -87,6 +122,18 @@ for(i of btns) {
         }
     });
 
+    i.addEventListener("click", function() {
+
+        var buttonID=this.id;
+        var str1=buttonID.split("_");
+
+        if(str1!=buttonID) {
+            var numberOfButton=parseInt(str1[1]);
+            reveal_squares(numberOfButton);        
+        }
+
+    });
+
 }
 
 
@@ -100,7 +147,6 @@ function flagControl(button) {
 
     if(button_ref.backgroundImage=='url("Transparent.png")' && board[row_index][item_index_in_row]==0) {button_ref.backgroundImage='url("Flag.png")';}
     else if(button_ref.backgroundImage=='url("Flag.png")' && board[row_index][item_index_in_row]==0) {button_ref.backgroundImage='url("Transparent.png")';}
-    generateBoard();
 
 }
 
@@ -130,25 +176,170 @@ M,0,0,0,0,M,0,M,0,0,0,0,0,0,0,0,0,0,
 
 function generateBoard() {
 
+
+
+
+
+
     //Generating the mines
     var number_of_squares=row_count*item_count;//Calculating total squares on the board
-    var mine_number=Math.floor(number_of_squares/5);//Determining the number of mines to be placed on the board
+    var mine_number=40;//Determining the number of mines to be placed on the board - original mine count for 18 by 18 board: 40
 
     for(let i=0; i<mine_number; i++) {
 
         var random_row=Math.floor(Math.random()*(row_count-1));
         var random_item_index_in_row=Math.floor(Math.random()*(item_count-1));
 
-        //Ensuring that the mine isn't places in the same place twice
-        while(board[random_row][random_item_index_in_row]==0) {
+        //Ensuring that the mine isn't placed in the same place twice
+        while(board[random_row][random_item_index_in_row]!="M") {
             board[random_row][random_item_index_in_row]="M";
         }
     }
 
-    corner_adjacent_lst=[[board[0][1], board[1][0], board[1][1]], [board[0][-2], board[1][-1], board[1][-2]], [board[-2][0], board[-2][1], board[-1][1]], [board[-1][-2], board[-2][-1], board[-2][-2]],]
-    console.log(corner_adjacent_lst);
+
+
+
+
+
+
+
+
+
+    //Count corner mines
+
+    corner_adjacent_lst=[
+
+        [board[0][1], board[1][0], board[1][1]],//Top left corner
+        [board[0][item_count-2], board[1][item_count-1], board[1][item_count-2]],//Top right corner
+        [board[row_count-2][0], board[row_count-2][1], board[row_count-1][1]],//Bottom left corner
+        [board[row_count-1][item_count-2], board[row_count-2][item_count-1], board[row_count-2][item_count-2]]//Bottom right corner
+
+    ];
+
+    for(let count=0; count<4; count++) {
+
+        var mine_count=corner_adjacent_lst[count].filter(x => x=="M").length//Counting the total mines in the corner
+
+        //Updating the game board accordingly
+        if(count==0 && board[0][0]==0) {board[0][0]=mine_count;}
+        else if (count==1 && board[0][item_count-1]==0) {board[0][item_count-1]=mine_count;}
+        else if (count==2 && board[row_count-1][0]==0) {board[row_count-1][0]=mine_count;}
+        else if (count==3 && board[row_count-1][item_count-1]==0) {board[row_count-1][item_count-1]=mine_count;}
+    }
+
+
+
+
+
+
+
+    //Count edge mines
+
+
+    //Top edge
+    for(let item=1; item<(item_count-1); item++) {
+
+        if(board[0][item]==0) {
+
+            proximity_squares=[board[0][item-1], board[0][item+1], board[1][item-1], board[1][item], board[1][item+1]];
+            board[0][item]=proximity_squares.filter(x => x=="M").length;
+        }
+    }
+
+    //Left edge
+    for(let row=1; row<(row_count-1); row++) {
+
+        if(board[row][0]==0) {
+
+            proximity_squares=[board[row-1][0], board[row+1][0], board[row-1][1], board[row][1], board[row+1][1]];
+            board[row][0]=proximity_squares.filter(x => x=="M").length;
+        }
+    }
+    
+    //Bottom edge
+    for(let item=1; item<(item_count-1); item++) {
+
+        if(board[row_count-1][item]==0) {
+
+            proximity_squares=[board[row_count-1][item-1], board[row_count-1][item+1], board[row_count-2][item-1], board[row_count-2][item], board[row_count-2][item+1]];
+            board[row_count-1][item]=proximity_squares.filter(x => x=="M").length;
+        }
+    }
+
+    //Right edge
+    for(let row=1; row<(row_count-1); row++) {
+
+        if(board[row][item_count-1]==0) {
+
+            proximity_squares=[board[row-1][item_count-1], board[row+1][item_count-1], board[row-1][item_count-2], board[row][item_count-2], board[row+1][item_count-2]];
+            board[row][item_count-1]=proximity_squares.filter(x => x=="M").length;
+        }
+    }
+
+
+
+
+
+
+    //Count all other mines
+
+    for(let row=1; row<(row_count-1); row++) {
+        for(let item=1; item<(row_count-1); item++) {
+
+            if(board[row][item]==0) {
+
+                proximity_squares=[board[row-1][item-1], board[row-1][item], board[row-1][item+1], board[row][item-1], board[row][item+1], board[row+1][item-1], board[row+1][item], board[row+1][item+1]]
+                board[row][item]=proximity_squares.filter(x => x=="M").length;
+            }
+        }
+    }
+    displayAll();
 }
 
+
+
+
+function reveal_squares(buttonNumber) {
+
+    row_index=(Math.ceil((buttonNumber/18)))-1//Retrieving the index of the row
+    item_index_in_row=buttonNumber-(18*row_index)-1//Retrieving the index of the button in the row
+
+    console.log("Button "+buttonNumber.toString()+" was pressed!");
+
+    if(board[row_index][item_index_in_row]==0) {
+        
+        proximity_squares=[
+            board[row_index-1][item_index_in_row-1], 
+            board[row_index-1][item_index_in_row], 
+            board[row_index-1][item_index_in_row+1], 
+            board[row_index][item_index_in_row-1], 
+            board[row_index-1][item_index_in_row+1], 
+            board[row_index+1][item_index_in_row-1], 
+            board[row_index+1][item_index_in_row], 
+            board[row_index+1][item_index_in_row+1]
+        ];
+
+        for(i of proximity_squares) {console.log("Hello: "+i);}
+    }   
+}
+
+
+
+function displayAll() {
+
+
+    count=1
+    for(row of board) {
+        for(item of row) {
+
+            button_ID="button_"+count.toString();
+            document.getElementById(button_ID).textContent=item;
+            document.getElementById(button_ID).style.color="black";
+            document.getElementById(button_ID).style.fontSize="20px";
+            count+=1;
+        }
+    }
+}
 
 </script>
 
