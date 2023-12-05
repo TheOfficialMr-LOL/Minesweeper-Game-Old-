@@ -177,10 +177,6 @@ M,0,0,0,0,M,0,M,0,0,0,0,0,0,0,0,0,0,
 function generateBoard() {
 
 
-
-
-
-
     //Generating the mines
     var number_of_squares=row_count*item_count;//Calculating total squares on the board
     var mine_number=40;//Determining the number of mines to be placed on the board - original mine count for 18 by 18 board: 40
@@ -195,12 +191,6 @@ function generateBoard() {
             board[random_row][random_item_index_in_row]="M";
         }
     }
-
-
-
-
-
-
 
 
 
@@ -234,7 +224,6 @@ function generateBoard() {
 
 
     //Count edge mines
-
 
     //Top edge
     for(let item=1; item<(item_count-1); item++) {
@@ -275,8 +264,6 @@ function generateBoard() {
             board[row][item_count-1]=proximity_squares.filter(x => x=="M").length;
         }
     }
-
-
 
 
 
@@ -324,7 +311,8 @@ function reveal_squares(buttonNumber) {
         //Storing the index of those empty squares into the total_squares_with_0 array and into the total_proximity_squares array.
         for(let item_count=0; item_count<8; item_count++) {
 
-            if(proximity_squares[item_count]==0) {
+            if(proximity_squares[item_count]==0 && total_proximity_squares.filter(x => x==proximity_squares[item_count]).length<1) {
+
                 total_squares_with_0.push(proximity_squares[item_count]);
                 total_proximity_squares.push(proximity_squares[item_count]);
             }
