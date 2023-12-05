@@ -301,25 +301,72 @@ function generateBoard() {
 
 function reveal_squares(buttonNumber) {
 
-    row_index=(Math.ceil((buttonNumber/18)))-1//Retrieving the index of the row
-    item_index_in_row=buttonNumber-(18*row_index)-1//Retrieving the index of the button in the row
+    var row_index=(Math.ceil((buttonNumber/18)))-1//Retrieving the index of the row
+    var item_index_in_row=buttonNumber-(18*row_index)-1//Retrieving the index of the button in the row
 
     console.log("Button "+buttonNumber.toString()+" was pressed!");
 
-    if(board[row_index][item_index_in_row]==0) {
-        
-        proximity_squares=[
-            board[row_index-1][item_index_in_row-1], 
-            board[row_index-1][item_index_in_row], 
-            board[row_index-1][item_index_in_row+1], 
-            board[row_index][item_index_in_row-1], 
-            board[row_index-1][item_index_in_row+1], 
-            board[row_index+1][item_index_in_row-1], 
-            board[row_index+1][item_index_in_row], 
-            board[row_index+1][item_index_in_row+1]
-        ];
+    var total_squares_with_0=[[row_index, item_index_in_row]];
+    var total_proximity_squares=[];
 
-        for(i of proximity_squares) {console.log("Hello: "+i);}
+
+    if(board[row_index][item_index_in_row]==0) {
+
+        
+        var top_left=board[row_index-1][item_index_in_row-1];
+        var top_middle=board[row_index-1][item_index_in_row]; 
+        var top_right=board[row_index-1][item_index_in_row+1]; 
+        
+        var middle_left=board[row_index][item_index_in_row-1]; 
+        var middle_right=board[row_index][item_index_in_row+1]; 
+
+        var bottom_left=board[row_index+1][item_index_in_row-1]; 
+        var bottom_middle=board[row_index+1][item_index_in_row];
+        var bottom_right=board[row_index+1][item_index_in_row+1];
+    
+
+        if(top_left==0) {
+
+            total_squares_with_0.push([row_index-1, item_index_in_row-1]);
+            total_proximity_squares.push([row_index-1, item_index_in_row-1]);
+        }
+        else if(top_middle==0) {
+
+            total_squares_with_0.push([row_index-1][item_index_in_row]);
+            total_proximity_squares.push([row_index-1][item_index_in_row]);
+        }
+        else if(top_right==0) {
+
+            total_squares_with_0.push([row_index-1][item_index_in_row+1]);
+            total_proximity_squares.push([row_index-1][item_index_in_row+1]);
+        }
+        else if(middle_left==0) {
+
+            total_squares_with_0.push([row_index][item_index_in_row-1]);
+            total_proximity_squares.push([row_index][item_index_in_row-1]);
+        }
+        else if(middle_right==0) {
+
+            total_squares_with_0.push([row_index][item_index_in_row+1]);
+            total_proximity_squares.push([row_index][item_index_in_row+1]);
+        }
+        else if(bottom_left==0) {
+
+            total_squares_with_0.push([row_index+1][item_index_in_row-1]);
+            total_proximity_squares.push([row_index+1][item_index_in_row-1]);
+        }
+        else if(bottom_middle==0) {
+
+            total_squares_with_0.push([row_index+1][item_index_in_row]);
+            total_proximity_squares.push([row_index+1][item_index_in_row]);
+        }
+        else if(bottom_right==0) {
+
+            total_squares_with_0.push(board[row_index+1][item_index_in_row+1]);
+            total_proximity_squares.push(board[row_index+1][item_index_in_row+1]);
+        }
+
+        
     }   
 }
 
