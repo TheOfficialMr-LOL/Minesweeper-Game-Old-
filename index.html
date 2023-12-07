@@ -299,59 +299,27 @@ function reveal_squares(buttonNumber) {
 
     if(board[row_index][item_index_in_row]==0) {
 
-        //var [top_left, top_middle, top_right, middle_left, middle_right, bottom_left, bottom_middle, bottom_right]=["none","none","none","none","none","none","none","none"]
-
+    
         //Storing the index of the proximity squares
-        //var top_left=board[row_index-1][item_index_in_row-1]; var top_middle=board[row_index-1][item_index_in_row]; var top_right=board[row_index-1][item_index_in_row+1]; var middle_left=board[row_index][item_index_in_row-1]; var middle_right=board[row_index][item_index_in_row+1]; var bottom_left=board[row_index+1][item_index_in_row-1]; var bottom_middle=board[row_index+1][item_index_in_row]; var bottom_right=board[row_index+1][item_index_in_row+1];
-        var [top_left, top_middle, top_right, middle_left, middle_right, bottom_left, bottom_middle, bottom_right]=["none","none","none","none","none","none","none","none"];
-        //Checking if the button pressed was position towards the the top left corner
-        if(row_index==0 && item_index_in_row==0) {
-            middle_right=board[row_index][item_index_in_row+1];
-            bottom_middle=board[row_index+1][item_index_in_row]; 
-            bottom_right=board[row_index+1][item_index_in_row+1];
-            console.log("Top left corner");
-        }
-
-        //Checking if the button pressed was positioned towards the top right corner
-        else if(row_index==0 && item_index_in_row==(item_count-1)) {
-            middle_left=board[row_index][item_index_in_row-1];
-            bottom_left=board[row_index+1][item_index_in_row-1]; 
-            bottom_middle=board[row_index+1][item_index_in_row];
-            console.log("Top right corner");
-        }
-        
-        //Checking if the button pressed was positioned towards the bottom left corner 
-        else if(row_index==(row_count-1) && item_index_in_row==0) {
-
-            top_middle=board[row_index-1][item_index_in_row];
-            top_right=board[row_index-1][item_index_in_row+1];
-            middle_right=board[row_index][item_index_in_row+1];
-            console.log("Bottom left corner");
-        }
-
-        //Checking if the button pressed was positioned towards the bottom right corner
-        else if(row_index==(row_count-1) && item_index_in_row==(item_count-1)) {
-
-            top_left=board[row_index-1][item_index_in_row-1];
-            top_middle=board[row_index-1][item_index_in_row];
-            middle_left=board[row_index][item_index_in_row-1];
-            console.log("Bottom right corner");
-        }
-
-        //Storing all of those proximity squares in an array
-        var proximity_squares=[top_left, top_middle, top_right, middle_left, middle_right, bottom_left, bottom_middle, bottom_right];
-
+        var top_left=board[row_index-1][item_index_in_row-1]; 
+        var top_middle=board[row_index-1][item_index_in_row]; 
+        var top_right=board[row_index-1][item_index_in_row+1]; 
+        var middle_left=board[row_index][item_index_in_row-1]; 
+        var middle_right=board[row_index][item_index_in_row+1]; 
+        var bottom_left=board[row_index+1][item_index_in_row-1]; 
+        var bottom_middle=board[row_index+1][item_index_in_row]; 
+        var bottom_right=board[row_index+1][item_index_in_row+1];
         //Looping through those proximity squares to check for any empty squares
         //Storing the index of those empty squares into the total_squares_with_0 array and into the total_proximity_squares array.
+        /*
         for(let item_count=0; item_count<8; item_count++) {
-    
-            if(proximity_squares[item_count]==0 && total_proximity_squares.filter(x => x==proximity_squares[item_count]).length<1) {
 
+            if(proximity_squares[item_count]==0 && total_proximity_squares.filter(x => x==proximity_squares[item_count]).length<1) {
                 total_squares_with_0.push(proximity_squares[item_count]);
                 total_proximity_squares.push(proximity_squares[item_count]);
             }
         }
-        
+        */
     }   
 }
 
