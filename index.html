@@ -52,6 +52,7 @@ var board=[
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], 
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -64,8 +65,7 @@ var board=[
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],                                 
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],                                
 
 ]
 
@@ -173,7 +173,6 @@ M,0,0,0,0,M,0,M,0,0,0,0,0,0,0,0,0,0,
 
 */
 
-
 function generateBoard() {
 
 
@@ -271,10 +270,8 @@ function generateBoard() {
     //Count all other mines
 
     for(let row=1; row<(row_count-1); row++) {
-        for(let item=1; item<(row_count-1); item++) {
-
+        for(let item=1; item<(item_count-1); item++) {
             if(board[row][item]==0) {
-
                 proximity_squares=[board[row-1][item-1], board[row-1][item], board[row-1][item+1], board[row][item-1], board[row][item+1], board[row+1][item-1], board[row+1][item], board[row+1][item+1]]
                 board[row][item]=proximity_squares.filter(x => x=="M").length;
             }
@@ -294,33 +291,45 @@ function reveal_squares(buttonNumber) {
     console.log("Button "+buttonNumber.toString()+" was pressed!");
 
     var total_squares_with_0=[[row_index, item_index_in_row]];
-    var total_proximity_squares=[];
+    var total_proximity_squares=[[row_index, item_index_in_row]];
 
 
-    if(board[row_index][item_index_in_row]==0) {
+    for(var x=0; x<10; x++) {
+        for(item of total_proximity_squares){
 
-    
-        //Storing the index of the proximity squares
-        var top_left=board[row_index-1][item_index_in_row-1]; 
-        var top_middle=board[row_index-1][item_index_in_row]; 
-        var top_right=board[row_index-1][item_index_in_row+1]; 
-        var middle_left=board[row_index][item_index_in_row-1]; 
-        var middle_right=board[row_index][item_index_in_row+1]; 
-        var bottom_left=board[row_index+1][item_index_in_row-1]; 
-        var bottom_middle=board[row_index+1][item_index_in_row]; 
-        var bottom_right=board[row_index+1][item_index_in_row+1];
-        //Looping through those proximity squares to check for any empty squares
-        //Storing the index of those empty squares into the total_squares_with_0 array and into the total_proximity_squares array.
-        /*
-        for(let item_count=0; item_count<8; item_count++) {
+            console.log(item)
+            row_index=item[0];
+            item_index_in_row=item[1];
 
-            if(proximity_squares[item_count]==0 && total_proximity_squares.filter(x => x==proximity_squares[item_count]).length<1) {
-                total_squares_with_0.push(proximity_squares[item_count]);
-                total_proximity_squares.push(proximity_squares[item_count]);
+            if(board[row_index][item_index_in_row]==0) {
+
+            
+                //Storing the index of the proximity squares
+                var top_left=board[row_index-1][item_index_in_row-1]; 
+                var top_middle=board[row_index-1][item_index_in_row]; 
+                var top_right=board[row_index-1][item_index_in_row+1]; 
+                var middle_left=board[row_index][item_index_in_row-1]; 
+                var middle_right=board[row_index][item_index_in_row+1]; 
+                var bottom_left=board[row_index+1][item_index_in_row-1]; 
+                var bottom_middle=board[row_index+1][item_index_in_row]; 
+                var bottom_right=board[row_index+1][item_index_in_row+1];
+
+                //Storing the proximity squares in a singular list
+                var proximity_squares=[top_left, top_middle, top_right, middle_left, middle_right, bottom_left, bottom_middle, bottom_middle];
+                //Looping through those proximity squares to check for any empty squares
+                //Storing the index of those empty squares into the total_squares_with_0 array and into the total_proximity_squares array.
+                
+                for(let item_count=0; item_count<8; item_count++) {
+
+                    if(proximity_squares[item_count]==0 && total_proximity_squares.filter(x => x==proximity_squares[item_count]).length==0) {
+                        total_squares_with_0.push(proximity_squares[item_count]);
+                        total_proximity_squares.push(proximity_squares[item_count]);
+                    }
+                }
             }
         }
-        */
     }   
+    console.log(total_proximity_squares);
 }
 
 
