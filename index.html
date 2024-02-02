@@ -281,56 +281,68 @@ function generateBoard() {
 }
 
 
+//Algorithm designed to check for duplicate squares
+function check_for_duplicate_square(squares_already_iterated, square_index) {
 
-//Algorithm to reveal all adjacent squares next to 0s - This is done using the domino effect
+    var duplicate_square=false;
+    for(i of squares_already_iterated) {
+        if(i==square_index) {
+            duplicate_square=true;
+            break;
+        }
+    }
+    return duplicate_square;
+}
+
+
+//Algorithm to reveal all adjacent squares next to 0s - This is done using recursive revealing
 function reveal_squares(buttonNumber) {
 
     var row_index=(Math.ceil((buttonNumber/18)))-1//Retrieving the index of the row
     var item_index_in_row=buttonNumber-(18*row_index)-1//Retrieving the index of the button in the row
 
-    console.log("Button "+buttonNumber.toString()+" was pressed!");
-
     var total_squares_with_0=[[row_index, item_index_in_row]];
-    var total_proximity_squares=[[row_index, item_index_in_row]];
+    var current_proximity_squares=[[row_index, item_index_in_row]];
 
 
-    for(var x=0; x<10; x++) {
-        for(item of total_proximity_squares){
+    for(i of current_proximity_squares) {
 
-            console.log(item)
-            row_index=item[0];
-            item_index_in_row=item[1];
+        row_index=i[0];
+        item_index_in_row=i[1];
 
-            if(board[row_index][item_index_in_row]==0) {
+        try{if(board[row_index-1][item_index_in_row-1]==0 && item_in_array([row_index-1, item_index_in_row-1], current_proximity_squares)==false){current_proximity_squares.push([row_index-1, item_index_in_row-1]);}} catch(err) {}
+        try{if(board[row_index-1][item_index_in_row]==0 && item_in_array([row_index-1, item_index_in_row], current_proximity_squares)==false) {current_proximity_squares.push([row_index-1, item_index_in_row]);}} catch(err) {}
+        try{if(board[row_index-1][item_index_in_row+1]==0 && item_in_array([row_index-1, item_index_in_row+1], current_proximity_squares)==false) {current_proximity_squares.push([row_index-1, item_index_in_row+1]);}} catch(err) {}
 
-            
-                //Storing the index of the proximity squares
-                var top_left=board[row_index-1][item_index_in_row-1]; 
-                var top_middle=board[row_index-1][item_index_in_row]; 
-                var top_right=board[row_index-1][item_index_in_row+1]; 
-                var middle_left=board[row_index][item_index_in_row-1]; 
-                var middle_right=board[row_index][item_index_in_row+1]; 
-                var bottom_left=board[row_index+1][item_index_in_row-1]; 
-                var bottom_middle=board[row_index+1][item_index_in_row]; 
-                var bottom_right=board[row_index+1][item_index_in_row+1];
+        try{if(board[row_index][item_index_in_row-1]==0 && item_in_array([row_index, item_index_in_row-1], current_proximity_squares)==false) {current_proximity_squares.push([row_index, item_index_in_row-1]);}} catch(err) {}
+        try{if(board[row_index][item_index_in_row+1]==0 && item_in_array([row_index, item_index_in_row+1], current_proximity_squares)==false) {current_proximity_squares.push([row_index, item_index_in_row+1]);}} catch(err) {}
 
-                //Storing the proximity squares in a singular list
-                var proximity_squares=[top_left, top_middle, top_right, middle_left, middle_right, bottom_left, bottom_middle, bottom_middle];
-                //Looping through those proximity squares to check for any empty squares
-                //Storing the index of those empty squares into the total_squares_with_0 array and into the total_proximity_squares array.
-                
-                for(let item_count=0; item_count<8; item_count++) {
+        try{if(board[row_index+1][item_index_in_row-1]==0 && item_in_array([row_index+1, item_index_in_row-1], current_proximity_squares)==false) {current_proximity_squares.push([row_index+1, item_index_in_row-1]);}} catch(err) {}
+        try{if(board[row_index+1][item_index_in_row]==0 && item_in_array([row_index+1, item_index_in_row], current_proximity_squares)==false) {current_proximity_squares.push([row_index+1, item_index_in_row]);}} catch(err) {}
+        try{if(board[row_index+1][item_index_in_row+1]==0 && item_in_array([row_index+1, item_index_in_row+1], current_proximity_squares)==false) {current_proximity_squares.push([row_index+1, item_index_in_row+1]);}} catch(err) {}
 
-                    if(proximity_squares[item_count]==0 && total_proximity_squares.filter(x => x==proximity_squares[item_count]).length==0) {
-                        total_squares_with_0.push(proximity_squares[item_count]);
-                        total_proximity_squares.push(proximity_squares[item_count]);
-                    }
-                }
-            }
-        }
-    }   
-    console.log(total_proximity_squares);
+        console.log(current_proximity_squares);        
+    }
+    console.log(current_proximity_squares);
 }
+
+
+
+function item_in_array(elem, arr) {
+
+    for(i of arr) {
+        if(i==elem) {
+            return true;
+            break;
+        }
+    }
+    return false;
+}
+
+
+
+
+
 
 
 
@@ -349,6 +361,7 @@ function displayAll() {
         }
     }
 }
+
 
 </script>
 
