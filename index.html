@@ -301,37 +301,40 @@ function reveal_squares(buttonNumber) {
     var row_index=(Math.ceil((buttonNumber/18)))-1//Retrieving the index of the row
     var item_index_in_row=buttonNumber-(18*row_index)-1//Retrieving the index of the button in the row
 
-    var total_squares_with_0=[[row_index, item_index_in_row]];
+    var total_squares_with_0=[];
     var current_proximity_squares=[[row_index, item_index_in_row]];
 
-
-    for(i of current_proximity_squares) {
+    var count=0;
+    for(let i of current_proximity_squares) {
 
         row_index=i[0];
         item_index_in_row=i[1];
 
-        try{if(board[row_index-1][item_index_in_row-1]==0 && item_in_array([row_index-1, item_index_in_row-1], current_proximity_squares)==false){current_proximity_squares.push([row_index-1, item_index_in_row-1]);}} catch(err) {}
-        try{if(board[row_index-1][item_index_in_row]==0 && item_in_array([row_index-1, item_index_in_row], current_proximity_squares)==false) {current_proximity_squares.push([row_index-1, item_index_in_row]);}} catch(err) {}
-        try{if(board[row_index-1][item_index_in_row+1]==0 && item_in_array([row_index-1, item_index_in_row+1], current_proximity_squares)==false) {current_proximity_squares.push([row_index-1, item_index_in_row+1]);}} catch(err) {}
+        try{if(board[row_index-1][item_index_in_row-1]==0 && item_in_array([row_index-1, item_index_in_row-1], total_squares_with_0)==false){total_squares_with_0.push([row_index-1, item_index_in_row-1]); current_proximity_squares.push([row_index-1, item_index_in_row-1]);}} catch(err) {}
+        try{if(board[row_index-1][item_index_in_row]==0 && item_in_array([row_index-1, item_index_in_row], total_squares_with_0)==false) {total_squares_with_0.push([row_index-1, item_index_in_row]); current_proximity_squares.push([row_index-1, item_index_in_row]);}} catch(err) {}
+        try{if(board[row_index-1][item_index_in_row+1]==0 && item_in_array([row_index-1, item_index_in_row+1], total_squares_with_0)==false) {total_squares_with_0.push([row_index-1, item_index_in_row+1]); current_proximity_squares.push([row_index-1, item_index_in_row+1]);}} catch(err) {}
 
-        try{if(board[row_index][item_index_in_row-1]==0 && item_in_array([row_index, item_index_in_row-1], current_proximity_squares)==false) {current_proximity_squares.push([row_index, item_index_in_row-1]);}} catch(err) {}
-        try{if(board[row_index][item_index_in_row+1]==0 && item_in_array([row_index, item_index_in_row+1], current_proximity_squares)==false) {current_proximity_squares.push([row_index, item_index_in_row+1]);}} catch(err) {}
+        try{if(board[row_index][item_index_in_row-1]==0 && item_in_array([row_index, item_index_in_row-1], total_squares_with_0)==false) {total_squares_with_0.push([row_index, item_index_in_row-1]); current_proximity_squares.push([row_index, item_index_in_row-1]);}} catch(err) {}
+        try{if(board[row_index][item_index_in_row+1]==0 && item_in_array([row_index, item_index_in_row+1], total_squares_with_0)==false) {total_squares_with_0.push([row_index, item_index_in_row+1]); current_proximity_squares.push([row_index, item_index_in_row+1]);}} catch(err) {}
 
-        try{if(board[row_index+1][item_index_in_row-1]==0 && item_in_array([row_index+1, item_index_in_row-1], current_proximity_squares)==false) {current_proximity_squares.push([row_index+1, item_index_in_row-1]);}} catch(err) {}
-        try{if(board[row_index+1][item_index_in_row]==0 && item_in_array([row_index+1, item_index_in_row], current_proximity_squares)==false) {current_proximity_squares.push([row_index+1, item_index_in_row]);}} catch(err) {}
-        try{if(board[row_index+1][item_index_in_row+1]==0 && item_in_array([row_index+1, item_index_in_row+1], current_proximity_squares)==false) {current_proximity_squares.push([row_index+1, item_index_in_row+1]);}} catch(err) {}
-
-        console.log(current_proximity_squares);        
+        try{if(board[row_index+1][item_index_in_row-1]==0 && item_in_array([row_index+1, item_index_in_row-1], total_squares_with_0)==false) {total_squares_with_0.push([row_index+1, item_index_in_row-1]); current_proximity_squares.push([row_index+1, item_index_in_row-1]);}} catch(err) {}
+        try{if(board[row_index+1][item_index_in_row]==0 && item_in_array([row_index+1, item_index_in_row], total_squares_with_0)==false) {total_squares_with_0.push([row_index+1, item_index_in_row]); current_proximity_squares.push([row_index+1, item_index_in_row]);}} catch(err) {}
+        try{if(board[row_index+1][item_index_in_row+1]==0 && item_in_array([row_index+1, item_index_in_row+1], total_squares_with_0)==false) {total_squares_with_0.push([row_index+1, item_index_in_row+1]); current_proximity_squares.push([row_index+1, item_index_in_row+1]);}} catch(err) {}
+ 
+        delete current_proximity_squares[0];
+        //console.log(total_squares_with_0);
+        //count++;
+        //if(count==10) {break;}
     }
-    console.log(current_proximity_squares);
+    console.log(total_squares_with_0);
 }
 
 
 
 function item_in_array(elem, arr) {
-
-    for(i of arr) {
-        if(i==elem) {
+    for(let i of arr) {
+        if(elem[0]==i[0] && elem[1]==i[1]) {
+            console.log("LOL");
             return true;
             break;
         }
