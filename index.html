@@ -111,12 +111,12 @@ var btns=document.querySelectorAll("button");
 for(i of btns) {
 
     //Adding an event listener to all of the buttons
-    i.addEventListener("dblclick", function() {
+    i.addEventListener("contextmenu", function() {
         
         var buttonID=this.id;
         var str1=buttonID.split("_");
 
-        if(str1!=buttonID) {
+        if(str1!=buttonID && document.getElementById(buttonID).style.backgroundColor=="rgb(252, 239, 169)") {
             var numberOfButton=parseInt(str1[1]);
             flagControl(numberOfButton);
         }
@@ -128,8 +128,15 @@ for(i of btns) {
         var str1=buttonID.split("_");
 
         if(str1!=buttonID) {
+
             var numberOfButton=parseInt(str1[1]);
-            reveal_squares(numberOfButton);        
+            var row_index=(Math.ceil((numberOfButton/18)))-1//Retrieving the index of the row
+            var item_index_in_row=numberOfButton-(18*row_index)-1//Retrieving the index of the button in the row
+           
+            if(board[row_index][item_index_in_row]==0 && document.getElementById(buttonID).style.backgroundColor=="rgb(252, 239, 169)") {
+                reveal_squares(numberOfButton); 
+            }
+    
         }
 
     });
@@ -178,7 +185,7 @@ function generateBoard() {
 
     //Generating the mines
     var number_of_squares=row_count*item_count;//Calculating total squares on the board
-    var mine_number=40;//Determining the number of mines to be placed on the board - original mine count for 18 by 18 board: 40
+    var mine_number=(row_count*item_count)*0.2063;//Determining the number of mines to be placed on the board - original mine count for 18 by 18 board: 40
 
     for(let i=0; i<mine_number; i++) {
 
@@ -303,8 +310,7 @@ function reveal_squares(buttonNumber) {
 
     var total_squares_with_0=[];
     var current_proximity_squares=[[row_index, item_index_in_row]];
-
-    var count=0;
+    
     for(let i of current_proximity_squares) {
 
         row_index=i[0];
@@ -322,11 +328,12 @@ function reveal_squares(buttonNumber) {
         try{if(board[row_index+1][item_index_in_row+1]==0 && item_in_array([row_index+1, item_index_in_row+1], total_squares_with_0)==false) {total_squares_with_0.push([row_index+1, item_index_in_row+1]); current_proximity_squares.push([row_index+1, item_index_in_row+1]);}} catch(err) {}
  
         delete current_proximity_squares[0];
-        //console.log(total_squares_with_0);
-        //count++;
-        //if(count==10) {break;}
+
     }
+
+    if(total_squares_with_0.length==0) {total_squares_with_0.push([row_index, item_index_in_row]);}
     console.log(total_squares_with_0);
+    updateGameBoard(total_squares_with_0);
 }
 
 
@@ -334,7 +341,6 @@ function reveal_squares(buttonNumber) {
 function item_in_array(elem, arr) {
     for(let i of arr) {
         if(elem[0]==i[0] && elem[1]==i[1]) {
-            console.log("LOL");
             return true;
             break;
         }
@@ -343,8 +349,15 @@ function item_in_array(elem, arr) {
 }
 
 
-
-
+function integer_in_array(elem, arr) {
+    for(let i of arr) {
+        if(i==elem) {
+            return true;
+            break;
+        }
+    }
+    return false;
+}
 
 
 
@@ -364,6 +377,43 @@ function displayAll() {
         }
     }
 }
+
+
+function updateGameBoard(array) {
+
+    //Revealing all the squares with 0
+    for(var square of array) {
+
+        var row=square[0];
+        var item=square[1];
+        var button_number=row_count*row+(item+1);
+
+        var button_ID="button_"+button_number.toString();
+        document.getElementById(button_ID).style.backgroundColor="#deeaee";
+        document.getElementById(button_ID).style.color="#deeaee";
+    }   
+
+
+    //Revealing everything else in proximity to the 0
+    var total_button_numbers=[];
+    for(var square of array) {
+
+        var row=square[0];
+        var item=square[1];
+
+        var button_numbers=[row_count*(row-1)+(item-1), row_count*(row-1)+(item), row_count*(row-1)+(item+1), row_count*(row)+(item-1), row_count*(row)+(item+1), row_count*(row+1)+(item-1), row_count*(row+1)+(item), row_count*(row+1)+(item+1)];
+        console.log(button_numbers);
+
+        for(var i of button_numbers) {
+            
+            if(i>0 && integer_in_array(i, total_button_numbers)==false) {
+                total_button_numbers.push(i);
+            }
+        }
+    }
+    console.log(total_button_numbers);
+}
+
 
 
 </script>
