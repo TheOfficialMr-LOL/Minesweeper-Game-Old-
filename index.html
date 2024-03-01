@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
 <body>
 
 <style>
@@ -37,7 +42,22 @@ transform:translateY(4px);
 
 
 <h1 style="text-align: center;"><u>Minesweeper</u></h1>
-<div id="matrix" style="text-align: center;" class="prevent-select"></div>
+
+
+
+
+
+<div id="information_bar">
+
+    <button id="GameStart/End_button" style="width: 60px; height: 60px; border-radius: 5px; margin-left: auto;" img src="StartButton_icon.png" style="width: 100%; height: auto;"></button>
+
+</div>
+<br>
+
+
+
+
+<div id="matrix" style="margin: auto; width: 720px; height: 720px;" class="prevent-select"></div>
 <br>
 <button id="startButton" style="width: 200px; height: 50px; top: 800px; margin: 10px auto;" class="prevent-select" onclick="generateBoard(); document.getElementById('startButton').style.display='none';">Start</button>
 
@@ -111,7 +131,7 @@ for(let i=0; i<row_count; i++) {
 }
 
 
-var btns=document.querySelectorAll("button");
+var btns=document.getElementById("matrix").querySelectorAll("button");
 let timer=0;
 let interval;
 let button_flagged=false;
